@@ -44,8 +44,8 @@ class Calculator {
 
     //Atualiza Valores
     refreshValues(total) {
-        this.upperValue.textContent = result;
-        this.resultValue.textContent = result;
+        this.upperValue.textContent = total;
+        this.resultValue.textContent = total;
     }
 
     //Resolve a Operação
@@ -58,12 +58,43 @@ class Calculator {
 
         for(let i = 0; i <= upperValueArray.length; i++) {
 
+            let operation = 0;
             let actualItem = upperValueArray[i];
 
-            if (actualItem == "+") {
-                result = parseFloat(upperValueArray[i - 1]) + parseFloat(upperValueArray[i + 1]);
+            //Faz a Multiplicação
+            if (actualItem == "x") {
+                result = calc.multiplication(upperValueArray[i - 1], upperValueArray[i + 1])
+                operation = 1;
+            //Faz a Divisão
+            } else if(actualItem == "/") {
+                result = calc.division(upperValueArray[i - 1], upperValueArray[i + 1])
+                operation = 1;
+            //Checa se o array ainda tem multiplicação e divisão a ser feita
+            } else if(!upperValueArray.includes('x') && !upperValueArray.includes('/')) {
+                //Soma e Subtração
+                //Faz a Soma
+                if (actualItem == "+") {
+                    result = calc.sum(upperValueArray[i - 1], upperValueArray[i + 1])
+                    operation = 1;
+                //Faz a Subtração
+                } else if (actualItem == "-") {
+                    result = calc.subtraction(upperValueArray[i - 1], upperValueArray[i + 1])
+                    operation = 1;
+                //Faz a Divisão
+                }
             }
 
+            //Atualiza valores do array para proxima iteração
+            if (operation) {
+                //Indice anterior no resultado da operação
+                upperValueArray[i - 1] = result;
+
+                //Remove os itens já utilizados para a operação
+                upperValueArray.splice(i, 2);
+
+                //Atualizar o valor do índice
+                i = 0;
+            }
         }
 
         if (result) {
