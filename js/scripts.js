@@ -6,6 +6,11 @@ class Calculator {
         this.reset = 0;
     }
 
+    clearValues() {
+        this.upperValue.textContent = '0';
+        this.resultValue.textContent = '0';
+    }
+
     checkLastDigit(input, upperValue, reg) {
         if((
             !reg.test(input) &&
@@ -25,16 +30,28 @@ class Calculator {
         //Verificar se há apenas números
         var reg = new RegExp('^\\d+$');
 
-        //Checa se precisa adicionar Sinal ou não
-        if (calc.checkLastDigit(input, upperValue, reg)) {
-            return false;
+        //Ativa o método de limpar o Display
+        if (input == 'AC') {
+            console.log('ac');
+            calc.clearValues();
+        } else {
+            //Checa se precisa adicionar Sinal ou não
+            if (calc.checkLastDigit(input, upperValue, reg)) {
+                return false;
+            }
+
+            //Adiciona espaço aos operadores
+            if (!reg.test(input)) {
+                input = ` ${input} `;
+            }
+
+            if (upperValue == "0") {
+                calc.upperValue.textContent = input;
+            } else {
+                calc.upperValue.textContent += input;
+            }
         }
 
-        if (upperValue == "0") {
-            calc.upperValue.textContent = input;
-        } else {
-            calc.upperValue.textContent += input;
-        }
 
     }
 
